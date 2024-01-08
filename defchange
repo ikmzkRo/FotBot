@@ -1,0 +1,25 @@
+datetime_col = pd.to_datetime(df2['日時'].str.strip(), format='%m/%d（%a） %H:%M')
+df2.loc[datetime_col.dt.hour >= 24, '日時'] = datetime_col - pd.Timedelta(hours=24)
+df2['日時'] = df2['日時'].dt.strftime('%m/%d（%a） %H:%M')
+
+
+# 日時列の値が24時以降である行の日時列の値を変更
+datetime_col = pd.to_datetime(df2['日時'].str.replace('\s+', ' '), format='%m/%d（%a） %H:%M')
+df2.loc[datetime_col.dt.hour >= 24, '日時'] = datetime_col - pd.Timedelta(hours=24)
+df2['日時'] = df2['日時'].dt.strftime('%m/%d（%a） %H:%M')
+
+
+
+datetime_col = pd.to_datetime(df2['日時'].str.replace('（', '').str.replace('）', '').str.replace('\s+', ' '), format='%m/%d %a %H:%M')
+df2.loc[datetime_col.dt.hour >= 24, '日時'] = datetime_col - pd.Timedelta(hours=24)
+df2['日時'] = df2['日時'].dt.strftime('%m/%d（%a） %H:%M')
+
+
+datetime_col = pd.to_datetime(df2['日時'].str.replace('（|）', '').str.replace('\s+', ' '), format='%m/%d(%a|%B %d, %Y %a) %H:%M')
+df2.loc[datetime_col.dt.hour >= 24, '日時'] = datetime_col - pd.Timedelta(hours=24)
+df2['日時'] = df2['日時'].dt.strftime('%m/%d（%a） %H:%M')
+
+
+datetime_col = pd.to_datetime(df2['日時'].str.replace('（|）', '').str.replace('\s+', ' '), format='(?P<m>\d{1,2})/(?P<d>\d{1,2})\((?P<w>[^)]+)\) (?P<H>\d{1,2}):(?P<M>\d{1,2})')
+df2.loc[datetime_col.dt.hour >= 24, '日時'] = datetime_col - pd.Timedelta(hours=24)
+df2['日時'] = df2['日時'].dt.strftime('%m/%d（%a） %H:%M')
